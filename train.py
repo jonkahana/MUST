@@ -39,7 +39,7 @@ warnings.filterwarnings("ignore")
 
 def get_args():
     parser = argparse.ArgumentParser('MUST training and evaluation script', add_help=False)
-    parser.add_argument('--batch_size', default=64, type=int)
+    parser.add_argument('--batch_size', default=32, type=int)
     parser.add_argument('--save_ckpt_freq', default=10, type=int)
     parser.add_argument('--eval_freq', default=1, type=int) 
     
