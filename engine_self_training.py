@@ -63,7 +63,7 @@ def train_one_epoch(model: torch.nn.Module, args, train_config,
 
             # fairness regularization
             probs = F.softmax(logits,dim=-1) 
-            probs_all = utils.all_gather_with_grad(probs)
+            probs_all = probs # utils.all_gather_with_grad(probs)
             probs_batch_avg = probs_all.mean(0) # average prediction probability across all gpus
 
             if args.nb_classes>=512: 
