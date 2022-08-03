@@ -2,16 +2,18 @@ import torch
 from torch import optim as optim
 import torch.nn as nn
 
-from timm.optim.adafactor import Adafactor
-from timm.optim.adahessian import Adahessian
-from timm.optim.adamp import AdamP
-from timm.optim.lookahead import Lookahead
-from timm.optim.nadam import Nadam
-from timm.optim.novograd import NovoGrad
-from timm.optim.nvnovograd import NvNovoGrad
-from timm.optim.radam import RAdam
-from timm.optim.rmsprop_tf import RMSpropTF
-from timm.optim.sgdp import SGDP
+import timm
+from timm import optim as tim_optim
+from tim_optim.adafactor import Adafactor
+from tim_optim.adahessian import Adahessian
+from tim_optim.adamp import AdamP
+from tim_optim.lookahead import Lookahead
+from tim_optim.nadam import Nadam
+from tim_optim.novograd import NovoGrad
+from tim_optim.nvnovograd import NvNovoGrad
+from tim_optim.radam import RAdam
+from tim_optim.rmsprop_tf import RMSpropTF
+from tim_optim.sgdp import SGDP
 
 import json
 
