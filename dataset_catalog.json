@@ -1,48 +1,48 @@
 {
     "food101": {
-        "path": "/export/share/datasets/vision/image_datasets/food101",
+        "path": "/cs/labs/yedid/jonkahana/datasets/Food101/food101",
         "type": "imagefolder",
         "train": "train",
         "test": "test"
     },
     "sun397": {
-        "path": "/export/share/datasets/vision/image_datasets/sun397",
+        "path": "/cs/labs/yedid/jonkahana/datasets/SUN397/sun397",
         "type": "filelist",
         "train": "train",
         "test": "test"
     },
     "dtd": {
-        "path": "/export/share/datasets/vision/image_datasets/dtd",
+        "path": "/cs/labs/yedid/jonkahana/datasets/DTD/dtd",
         "type": "imagefolder",
         "train": "trainval",
         "test": "test"
     },
     "pets": {
-        "path": "/export/share/datasets/vision/image_datasets/pets",
+        "path": "/cs/labs/yedid/jonkahana/datasets/OxfordPets/oxford_pets",
         "type": "imagefolder",
         "train": "train",
         "test": "test"
     },
     "caltech101": {
-        "path": "/export/share/datasets/vision/image_datasets/caltech101",
+        "path": "/cs/labs/yedid/jonkahana/datasets/Caltech101/caltech101",
         "type": "imagefolder",
         "train": "train",
         "test": "test"
     },
     "gtsrb": {
-        "path": "/export/share/datasets/vision/image_datasets/gtsrb",
+        "path": "/cs/labs/yedid/jonkahana/datasets/GTSRB/gtsrb",
         "type": "imagefolder",
         "train": "train",
         "test": "test"
     },
     "ucf101_frames": {
-        "path": "/export/share/datasets/vision/image_datasets/ucf101",
+        "path": "/cs/labs/yedid/jonkahana/datasets/UCF101/ucf101",
         "type": "imagefolder",
         "train": "train",
         "test": "val"
     },
     "imagenet": {
-        "path": "/export/share/datasets/vision/imagenet/",
+        "path": "/cs/labs/yedid/jonkahana/datasets/imagenet/imagenet/",
         "type": "imagefolder",
         "train": "train",
         "test": "val"
