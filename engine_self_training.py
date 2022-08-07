@@ -201,7 +201,7 @@ def evaluate(data_loader, model, device, model_ema=None, args=None):
 
 
 @torch.no_grad()
-def evaluate_with_clip(data_loader, model, device, model_ema, args=None):
+def evaluate_with_clip(data_loader, model, device, clip, args=None):
     criterion = torch.nn.CrossEntropyLoss()
 
     metric_logger = utils.MetricLogger(delimiter="  ")
@@ -209,7 +209,7 @@ def evaluate_with_clip(data_loader, model, device, model_ema, args=None):
 
     # switch to evaluation mode
     model.eval()
-    model_ema.ema.eval()
+    clip.eval()
 
     if args.dataset in ['pets', 'caltech101']:
         all_outputs = []
@@ -231,7 +231,7 @@ def evaluate_with_clip(data_loader, model, device, model_ema, args=None):
             acc = accuracy(output, target)[0]
             metric_logger.meters['acc1'].update(acc.item(), n=images.shape[0])
 
-        ema_output = model_ema.ema(images)
+        ema_output = clip(images)
 
         if args.dataset in ['pets', 'caltech101']:
             all_ema_outputs.append(ema_output.cpu())
