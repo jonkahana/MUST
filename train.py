@@ -152,7 +152,7 @@ def main(args):
     dataset_train = build_dataset(is_train=True, args=args, train_config=train_config)
     dataset_val = build_dataset(is_train=False, args=args)
 
-    if True:  # args.distributed:
+    if args.distributed:
         num_tasks = utils.get_world_size()
         global_rank = utils.get_rank()
         sampler_train = torch.utils.data.DistributedSampler(
