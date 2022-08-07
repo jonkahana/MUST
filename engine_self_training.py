@@ -199,3 +199,62 @@ def evaluate(data_loader, model, device, model_ema=None, args=None):
     print('* Acc@1 {top1.global_avg:.3f}'.format(top1=metric_logger.acc1))    
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
+
+@torch.no_grad()
+def evaluate_with_clip(data_loader, model, device, model_ema, args=None):
+    criterion = torch.nn.CrossEntropyLoss()
+
+    metric_logger = utils.MetricLogger(delimiter="  ")
+    header = 'Test:'
+
+    # switch to evaluation mode
+    model.eval()
+    model_ema.ema.eval()
+
+    if args.dataset in ['pets', 'caltech101']:
+        all_outputs = []
+        all_ema_outputs = []
+        all_targets = []
+
+    all_accs = []
+    for batch in metric_logger.log_every(data_loader, 10, header):
+        images = batch[0].to(device, non_blocking=True)
+        target = batch[-1].to(device, non_blocking=True)
+
+        # compute output
+        output = model(images)
+
+        if args.dataset in ['pets', 'caltech101']:
+            all_outputs.append(output.cpu())
+            all_targets.append(target.cpu())
+        else:
+            acc = accuracy(output, target)[0]
+            metric_logger.meters['acc1'].update(acc.item(), n=images.shape[0])
+
+        ema_output = model_ema.ema(images)
+
+        if args.dataset in ['pets', 'caltech101']:
+            all_ema_outputs.append(ema_output.cpu())
+        else:
+            ema_acc1 = accuracy(ema_output, target)[0]
+            metric_logger.meters['ema_acc1'].update(ema_acc1.item(), n=images.shape[0])
+            model_vs_ema_acc = accuracy(output, ema_output.argmax(dim=1))[0]
+            metric_logger.meters['model_vs_ema_acc1'].update(model_vs_ema_acc.item(), n=images.shape[0])
+            wrong_indxs = torch.where(output.argmax(dim=1) != target)[0]
+            model_vs_ema_acc_on_wrongs = accuracy(output[wrong_indxs], ema_output[wrong_indxs].argmax(dim=1))[0]
+            metric_logger.meters['model_vs_ema_acc1_on_wrongs'].update(model_vs_ema_acc_on_wrongs.item(), n=images.shape[0])
+
+
+    if args.dataset in ['pets', 'caltech101']:
+        mean_per_class = utils.mean_per_class(torch.cat(all_outputs), torch.cat(all_targets))
+        metric_logger.meters['acc1'].update(mean_per_class)
+        mean_per_class = utils.mean_per_class(torch.cat(all_ema_outputs), torch.cat(all_targets))
+        metric_logger.meters['ema_acc1'].update(mean_per_class)
+
+    print('* Acc@1 {top1.global_avg:.3f}'.format(top1=metric_logger.acc1))
+    print('* CLIP Acc@1 {top1.global_avg:.3f}'.format(top1=metric_logger.ema_acc1))
+    print('\% Same answer as CLIP {top1.global_avg:.3f}'.format(top1=metric_logger.model_vs_ema_acc1))
+    print('\% Same answer as CLIP in Mistakes {top1.global_avg:.3f}'.format(top1=metric_logger.model_vs_ema_acc1_on_wrongs))
+
+    return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
+
