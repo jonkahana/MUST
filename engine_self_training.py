@@ -241,8 +241,9 @@ def evaluate_with_clip(data_loader, model, device, clip, args=None):
             model_vs_ema_acc = accuracy(output, ema_output.argmax(dim=1))[0]
             metric_logger.meters['model_vs_ema_acc1'].update(model_vs_ema_acc.item(), n=images.shape[0])
             wrong_indxs = torch.where(output.argmax(dim=1) != target)[0]
-            model_vs_ema_acc_on_wrongs = accuracy(output[wrong_indxs], ema_output[wrong_indxs].argmax(dim=1))[0]
-            metric_logger.meters['model_vs_ema_acc1_on_wrongs'].update(model_vs_ema_acc_on_wrongs.item(), n=images.shape[0])
+            if len(wrong_indxs) > 0:
+                model_vs_ema_acc_on_wrongs = accuracy(output[wrong_indxs], ema_output[wrong_indxs].argmax(dim=1))[0]
+                metric_logger.meters['model_vs_ema_acc1_on_wrongs'].update(model_vs_ema_acc_on_wrongs.item(), n=len(wrong_indxs))
 
 
     if args.dataset in ['pets', 'caltech101']:
