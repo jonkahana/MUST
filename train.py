@@ -160,6 +160,7 @@ def main(args):
         )
         print("Sampler_train = %s" % str(sampler_train))
     else:
+        global_rank = 0
         sampler_train = torch.utils.data.RandomSampler(dataset_train)
     sampler_val = torch.utils.data.SequentialSampler(dataset_val)
     
